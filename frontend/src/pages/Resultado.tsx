@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Alert from "@mui/material/Alert";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import CircularProgress from "@mui/material/CircularProgress";
-import Grid from "@mui/material/Grid"; // já é o Grid V2 no MUI 7.x
+import {
+  Container,
+  Typography,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+  Alert,
+  Box,
+  Paper,
+  CircularProgress,
+  Grid,
+} from "@mui/material";
 import api from "../services/api";
 import { ErroAPI } from "../types/ErroAPI";
-import { useSearchParams } from 'react-router-dom';
 
 interface ResultadoDTO {
   pautaId: number;
@@ -20,12 +24,24 @@ interface ResultadoDTO {
   resultado: string;
 }
 
+interface PautaDTO {
+  id: number;
+  assunto: string;
+}
+
 const Resultado: React.FC = () => {
-  const [searchParams] = useSearchParams();
+  const [pautas, setPautas] = useState<PautaDTO[]>([]);
   const [pautaId, setPautaId] = useState<number | "">("");
   const [data, setData] = useState<ResultadoDTO | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    api.get<PautaDTO[]>("/pautas")
+      .then(res => setPautas(res.data))
+      .catch(() => {
+      });
+  }, []);
 
   const fetchResultado = async (id: number) => {
     setLoading(true);
@@ -35,30 +51,21 @@ const Resultado: React.FC = () => {
       setData(res.data);
     } catch (err: unknown) {
       const erro = err as ErroAPI;
-      setError(erro.mensagem);
+      setError(erro.mensagem || "Erro ao buscar resultado");
       setData(null);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    const pautaIdParam = searchParams.get("pautaId");
-    if (pautaIdParam) {
-      const id = Number(pautaIdParam);
-      setPautaId(id);
-      fetchResultado(id);
-    }
-  }, [searchParams]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!pautaId) {
-      setError("Informe o ID da pauta");
+      setError("Selecione uma pauta");
       setData(null);
       return;
     }
-    await fetchResultado(pautaId);
+    fetchResultado(pautaId as number);
   };
 
   return (
@@ -67,26 +74,35 @@ const Resultado: React.FC = () => {
         Resultado da Votação
       </Typography>
 
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{ display: "flex", gap: 2, mb: 2 }}
-      >
-        <TextField
-          type="number"
-          label="ID da Pauta"
-          value={pautaId}
-          onChange={(e) => setPautaId(Number(e.target.value))}
-          fullWidth
-          required
-        />
+      <Box component="form" onSubmit={handleSubmit} sx={{ mb: 2 }}>
+        <FormControl fullWidth required sx={{ mb: 2 }}>
+          <InputLabel id="select-pauta-label">Pauta</InputLabel>
+          <Select
+            labelId="select-pauta-label"
+            id="select-pauta"
+            value={pautaId}
+            label="Pauta"
+            onChange={(e) => setPautaId(e.target.value as number)}
+          >
+            <MenuItem value="">
+              <em>Selecione...</em>
+            </MenuItem>
+            {pautas.map((p) => (
+              <MenuItem key={p.id} value={p.id}>
+                {p.id} – {p.assunto}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
         <Button
           variant="contained"
           type="submit"
           disabled={loading}
-          sx={{ minWidth: 120 }}
+          fullWidth
+          sx={{ minHeight: 48 }}
         >
-          {loading ? <CircularProgress size={24} /> : "Buscar"}
+          {loading ? <CircularProgress size={24} /> : "Buscar Resultado"}
         </Button>
       </Box>
 
