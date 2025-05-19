@@ -48,7 +48,7 @@ Este é um sistema completo de votação online desenvolvido para atender ao des
 ### Clonando o Projeto
 
 ```bash
-git clone https://github.com/seuusuario/desafio-votacao-fullstack.git
+git clone https://github.com/gledsonximenes/desafio-votacao-fullstack.git
 cd desafio-votacao-fullstack
 ```
 
