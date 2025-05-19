@@ -52,7 +52,7 @@ git clone https://github.com/seuusuario/desafio-votacao-fullstack.git
 cd desafio-votacao-fullstack
 ```
 
-### Rodando com Docker (opcional)
+### Rodar o docker para criação da base de dados local Postgres
 
 ```bash
 docker-compose up --build
