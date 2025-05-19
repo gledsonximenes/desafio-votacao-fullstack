@@ -1,0 +1,64 @@
+# =============== GLOBAL ===============
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+*.swo
+*.bak
+
+# =============== BACKEND ===============
+/backend/target/
+/backend/.idea/
+/backend/.classpath
+/backend/.project
+/backend/.settings/
+/backend/.vscode/
+
+# Java specific
+*.class
+*.jar
+*.war
+*.ear
+hs_err_pid*
+*.iml
+
+# Logs
+/backend/logs/
+*.log
+
+# Maven
+/backend/.mvn/
+!/backend/.mvn/wrapper/maven-wrapper.jar
+/backend/mvnw
+/backend/mvnw.cmd
+
+# =============== FRONTEND ===============
+/frontend/node_modules/
+/frontend/build/
+/frontend/dist/
+/frontend/.env
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local
+/frontend/.next/
+/frontend/.turbo/
+/frontend/.vscode/
+/frontend/coverage/
+/frontend/.eslintcache
+frontend/yarn.lock
+frontend/package-lock.json
+
+# IDEs and Editor folders
+**/.idea/
+**/.vscode/
+**/.history/
+**/.npm/
+**/.cache/
+**/.temp/
+**/.tmp/
+
+# =============== DOCKER ===============
+/*.env
+docker-compose.override.yml

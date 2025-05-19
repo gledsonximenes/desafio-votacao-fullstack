@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: votacao-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: votacao
+      POSTGRES_USER: votauser
+      POSTGRES_PASSWORD: vota123
+    ports:
+      - "5432:5432"
+    volumes:
+      - votacao-data:/var/lib/postgresql/data
+
+volumes:
+  votacao-data:
